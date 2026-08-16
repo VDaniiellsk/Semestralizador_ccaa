@@ -1,0 +1,35 @@
+[2026-08-16 10:23:11] [INFO] ==========================================================================================
+[2026-08-16 10:23:11] [INFO] INICIANDO SINCRONIZAÇÃO DE RECEITAS | OPERADOR: Daniel | ANO REF: 2026
+[2026-08-16 10:23:11] [INFO] ==========================================================================================
+[2026-08-16 10:23:11] [WARNING] [SISTEMA] Ordem de destruição do banco de dados iniciada ANTES da extração das filiais.
+[2026-08-16 10:23:11] [INFO] [Banco de Dados] Tabela 'recebiveis_auditados' dropada. O banco foi expurgado com sucesso.
+[2026-08-16 10:23:11] [INFO] [SISTEMA] O banco de dados foi completamente expurgado e zerado.
+[2026-08-16 10:23:14] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:23:14] [INFO] [1/6] [FILIAL PARALELA] Inicializando pipeline...
+[2026-08-16 10:23:18] [INFO] Detectada tela de login. Autenticando sessão com usuário `Daniel@ccaaparalela`...
+[2026-08-16 10:23:29] [INFO] Sessão validada com sucesso no Sponte para Daniel@ccaaparalela
+[2026-08-16 10:23:29] [INFO] [Paralela] Acessando página de Contas a Receber (URL: https://www.sponteweb.com.br/SPRel/Financeiro/ContasReceber.aspx)...
+[2026-08-16 10:23:35] [INFO] [Paralela] Preenchendo regras de tela: Selecionando Pendentes e Quitadas...
+[2026-08-16 10:23:36] [INFO] [Paralela] Injetando data inicial de corte: 01/11/2025...
+[2026-08-16 10:23:37] [INFO] [Paralela] Filtrando categoria financeira para '1. Mensalidades'...
+[2026-08-16 10:24:08] [INFO] [Paralela] Disparando ordem de exportação para Excel Tabulado...
+[2026-08-16 10:25:24] [ERROR] [Paralela] Falha arquitetural executando Paralela: Target page, context or browser has been closed
+=========================== logs ===========================
+waiting for event "download"
+============================================================
+[2026-08-16 10:25:24] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 296, in sincronizar_todas_as_unidades_sponte
+    path_rec = extrair_contas_receber_unidade(page_unid, unidade, data_inicial_sp, logger, log_ui)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 245, in extrair_contas_receber_unidade
+    with page.expect_download(timeout=120000) as download_info:
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_sync_base.py", line 85, in __exit__
+    self._event.value
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_sync_base.py", line 59, in value
+    raise exception
+playwright._impl._errors.Error: Target page, context or browser has been closed
+=========================== logs ===========================
+waiting for event "download"
+============================================================
+
+[2026-08-16 10:25:24] [INFO] [Paralela] Ciclo de vida da filial encerrado. Tempo total: 129.93s.

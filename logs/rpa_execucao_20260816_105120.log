@@ -1,0 +1,117 @@
+[2026-08-16 10:51:20] [INFO] ==========================================================================================
+[2026-08-16 10:51:20] [INFO] INICIANDO SINCRONIZAÇÃO DE RECEITAS | OPERADOR: Daniel | ANO REF: 2026
+[2026-08-16 10:51:20] [INFO] ==========================================================================================
+[2026-08-16 10:51:20] [INFO] [Banco de Dados] Tabela 'recebiveis_auditados' dropada. O banco foi expurgado com sucesso.
+[2026-08-16 10:51:20] [INFO] [SISTEMA] O banco de dados foi completamente expurgado.
+[2026-08-16 10:51:23] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:51:23] [INFO] [1/6] [FILIAL PARALELA]
+[2026-08-16 10:51:28] [INFO] Detectada tela de login. Autenticando `Daniel@ccaaparalela`...
+[2026-08-16 10:51:38] [INFO] Autenticado no Sponte para Daniel@ccaaparalela
+[2026-08-16 10:51:38] [INFO] [Paralela] Acessando módulo Financeiro...
+[2026-08-16 10:51:44] [INFO] [Paralela] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:51:45] [INFO] [Paralela] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:51:45] [INFO] [Paralela] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:51:45] [INFO] [Paralela] Forçando ativação da Exportação
+[2026-08-16 10:51:47] [INFO] [Paralela] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:52:10] [INFO] [Paralela] Download finalizado: rec_Paralela_1786888329.xlsx
+[2026-08-16 10:52:10] [INFO] [Paralela] Artefato bruto: 541.00 KB
+[2026-08-16 10:52:10] [INFO] [Paralela] Transferindo para ETL...
+[2026-08-16 10:52:11] [INFO] [Paralela] ETL processou em 1.35s.
+[2026-08-16 10:52:11] [INFO] [Banco de Dados] Preparando inserção de 2044 registros para a filial 'Paralela'.
+[2026-08-16 10:52:11] [INFO] [Banco de Dados] Operação de I/O concluída. 2044 linhas persistidas com sucesso.
+[2026-08-16 10:52:11] [INFO] [Paralela] [1/6] ✅ Paralela: 2044 parcelas computadas.
+[2026-08-16 10:52:11] [INFO] [Paralela] Ciclo encerrado. Tempo: 48.47s.
+[2026-08-16 10:52:11] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:52:11] [INFO] [2/6] [FILIAL MATATU DE BROTAS]
+[2026-08-16 10:52:14] [INFO] Detectada tela de login. Autenticando `Daniel@ccaamatatu`...
+[2026-08-16 10:52:24] [INFO] Autenticado no Sponte para Daniel@ccaamatatu
+[2026-08-16 10:52:24] [INFO] [Matatu de Brotas] Acessando módulo Financeiro...
+[2026-08-16 10:52:30] [INFO] [Matatu de Brotas] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:52:31] [INFO] [Matatu de Brotas] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:52:31] [INFO] [Matatu de Brotas] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:52:31] [INFO] [Matatu de Brotas] Forçando ativação da Exportação
+[2026-08-16 10:52:33] [INFO] [Matatu de Brotas] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:52:56] [INFO] [Matatu de Brotas] Download finalizado: rec_Matatu de Brotas.xlsx
+[2026-08-16 10:52:56] [INFO] [Matatu de Brotas] Artefato bruto: 558.87 KB
+[2026-08-16 10:52:56] [INFO] [Matatu de Brotas] Transferindo para ETL...
+[2026-08-16 10:52:57] [INFO] [Matatu de Brotas] ETL processou em 1.25s.
+[2026-08-16 10:52:57] [INFO] [Banco de Dados] Preparando inserção de 2205 registros para a filial 'Matatu de Brotas'.
+[2026-08-16 10:52:57] [INFO] [Banco de Dados] Operação de I/O concluída. 2205 linhas persistidas com sucesso.
+[2026-08-16 10:52:57] [INFO] [Matatu de Brotas] [2/6] ✅ Matatu de Brotas: 2205 parcelas computadas.
+[2026-08-16 10:52:58] [INFO] [Matatu de Brotas] Ciclo encerrado. Tempo: 46.20s.
+[2026-08-16 10:52:58] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:52:58] [INFO] [3/6] [FILIAL IGUATEMI]
+[2026-08-16 10:53:00] [INFO] Detectada tela de login. Autenticando `Daniel@ccaaiguatemi`...
+[2026-08-16 10:53:11] [INFO] Autenticado no Sponte para Daniel@ccaaiguatemi
+[2026-08-16 10:53:11] [INFO] [Iguatemi] Acessando módulo Financeiro...
+[2026-08-16 10:53:16] [INFO] [Iguatemi] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:53:17] [INFO] [Iguatemi] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:53:17] [INFO] [Iguatemi] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:53:18] [INFO] [Iguatemi] Forçando ativação da Exportação
+[2026-08-16 10:53:19] [INFO] [Iguatemi] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:53:42] [INFO] [Iguatemi] Download finalizado: rec_Iguatemi.xlsx
+[2026-08-16 10:53:42] [INFO] [Iguatemi] Artefato bruto: 499.92 KB
+[2026-08-16 10:53:42] [INFO] [Iguatemi] Transferindo para ETL...
+[2026-08-16 10:53:43] [INFO] [Iguatemi] ETL processou em 1.26s.
+[2026-08-16 10:53:43] [INFO] [Banco de Dados] Preparando inserção de 1918 registros para a filial 'Iguatemi'.
+[2026-08-16 10:53:43] [INFO] [Banco de Dados] Operação de I/O concluída. 1918 linhas persistidas com sucesso.
+[2026-08-16 10:53:43] [INFO] [Iguatemi] [3/6] ✅ Iguatemi: 1918 parcelas computadas.
+[2026-08-16 10:53:43] [INFO] [Iguatemi] Ciclo encerrado. Tempo: 45.39s.
+[2026-08-16 10:53:43] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:53:43] [INFO] [4/6] [FILIAL SIMÕES FILHO]
+[2026-08-16 10:53:46] [INFO] Detectada tela de login. Autenticando `Daniel@ccaasimoesfilho`...
+[2026-08-16 10:53:57] [INFO] Autenticado no Sponte para Daniel@ccaasimoesfilho
+[2026-08-16 10:53:57] [INFO] [Simões Filho] Acessando módulo Financeiro...
+[2026-08-16 10:54:02] [INFO] [Simões Filho] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:54:03] [INFO] [Simões Filho] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:54:03] [INFO] [Simões Filho] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:54:04] [INFO] [Simões Filho] Forçando ativação da Exportação
+[2026-08-16 10:54:05] [INFO] [Simões Filho] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:54:18] [INFO] [Simões Filho] Download finalizado: rec_Simões Filho.xlsx
+[2026-08-16 10:54:18] [INFO] [Simões Filho] Artefato bruto: 199.17 KB
+[2026-08-16 10:54:18] [INFO] [Simões Filho] Transferindo para ETL...
+[2026-08-16 10:54:18] [INFO] [Simões Filho] ETL processou em 0.51s.
+[2026-08-16 10:54:18] [INFO] [Banco de Dados] Preparando inserção de 738 registros para a filial 'Simões Filho'.
+[2026-08-16 10:54:18] [INFO] [Banco de Dados] Operação de I/O concluída. 738 linhas persistidas com sucesso.
+[2026-08-16 10:54:18] [INFO] [Simões Filho] [4/6] ✅ Simões Filho: 738 parcelas computadas.
+[2026-08-16 10:54:18] [INFO] [Simões Filho] Ciclo encerrado. Tempo: 35.54s.
+[2026-08-16 10:54:18] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:54:18] [INFO] [5/6] [FILIAL PERIPERI]
+[2026-08-16 10:54:21] [INFO] Detectada tela de login. Autenticando `Daniel@ccaaperiperi`...
+[2026-08-16 10:54:31] [INFO] Autenticado no Sponte para Daniel@ccaaperiperi
+[2026-08-16 10:54:31] [INFO] [Periperi] Acessando módulo Financeiro...
+[2026-08-16 10:54:38] [INFO] [Periperi] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:54:39] [INFO] [Periperi] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:54:39] [INFO] [Periperi] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:54:40] [INFO] [Periperi] Forçando ativação da Exportação
+[2026-08-16 10:54:41] [INFO] [Periperi] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:55:23] [INFO] [Periperi] Download finalizado: rec_Periperi.xlsx
+[2026-08-16 10:55:23] [INFO] [Periperi] Artefato bruto: 948.32 KB
+[2026-08-16 10:55:23] [INFO] [Periperi] Transferindo para ETL...
+[2026-08-16 10:55:25] [INFO] [Periperi] ETL processou em 1.79s.
+[2026-08-16 10:55:25] [INFO] [Banco de Dados] Preparando inserção de 3668 registros para a filial 'Periperi'.
+[2026-08-16 10:55:25] [INFO] [Banco de Dados] Operação de I/O concluída. 3668 linhas persistidas com sucesso.
+[2026-08-16 10:55:25] [INFO] [Periperi] [5/6] ✅ Periperi: 3668 parcelas computadas.
+[2026-08-16 10:55:25] [INFO] [Periperi] Ciclo encerrado. Tempo: 66.33s.
+[2026-08-16 10:55:25] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:55:25] [INFO] [6/6] [FILIAL CAJAZEIRAS]
+[2026-08-16 10:55:27] [INFO] Detectada tela de login. Autenticando `Daniel@ccaacajazeiras`...
+[2026-08-16 10:55:36] [INFO] Autenticado no Sponte para Daniel@ccaacajazeiras
+[2026-08-16 10:55:36] [INFO] [Cajazeiras] Acessando módulo Financeiro...
+[2026-08-16 10:55:42] [INFO] [Cajazeiras] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:55:42] [INFO] [Cajazeiras] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:55:43] [INFO] [Cajazeiras] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:55:43] [INFO] [Cajazeiras] Forçando ativação da Exportação
+[2026-08-16 10:55:45] [INFO] [Cajazeiras] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:56:08] [INFO] [Cajazeiras] Download finalizado: rec_Cajazeiras.xlsx
+[2026-08-16 10:56:08] [INFO] [Cajazeiras] Artefato bruto: 516.40 KB
+[2026-08-16 10:56:08] [INFO] [Cajazeiras] Transferindo para ETL...
+[2026-08-16 10:56:10] [INFO] [Cajazeiras] ETL processou em 1.90s.
+[2026-08-16 10:56:10] [INFO] [Banco de Dados] Preparando inserção de 1986 registros para a filial 'Cajazeiras'.
+[2026-08-16 10:56:10] [INFO] [Banco de Dados] Operação de I/O concluída. 1986 linhas persistidas com sucesso.
+[2026-08-16 10:56:10] [INFO] [Cajazeiras] [6/6] ✅ Cajazeiras: 1986 parcelas computadas.
+[2026-08-16 10:56:10] [INFO] [Cajazeiras] Ciclo encerrado. Tempo: 45.45s.
+[2026-08-16 10:56:10] [INFO] ==========================================================================================
+[2026-08-16 10:56:10] [INFO] RESUMO GERAL | TEMPO: 290.39s
+[2026-08-16 10:56:10] [INFO] Sucessos (6): Paralela, Matatu de Brotas, Iguatemi, Simões Filho, Periperi, Cajazeiras
+[2026-08-16 10:56:10] [INFO] ==========================================================================================

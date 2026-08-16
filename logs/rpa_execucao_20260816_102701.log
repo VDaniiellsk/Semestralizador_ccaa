@@ -1,0 +1,316 @@
+[2026-08-16 10:27:01] [INFO] ==========================================================================================
+[2026-08-16 10:27:01] [INFO] INICIANDO SINCRONIZAÇÃO DE RECEITAS | OPERADOR: Daniel | ANO REF: 2026
+[2026-08-16 10:27:01] [INFO] ==========================================================================================
+[2026-08-16 10:27:01] [INFO] [Banco de Dados] Tabela 'recebiveis_auditados' dropada. O banco foi expurgado com sucesso.
+[2026-08-16 10:27:01] [INFO] [SISTEMA] O banco de dados foi completamente expurgado.
+[2026-08-16 10:27:03] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:27:03] [INFO] [1/6] [FILIAL PARALELA]
+[2026-08-16 10:27:12] [INFO] [Paralela] Acessando módulo Financeiro...
+[2026-08-16 10:27:20] [INFO] [Paralela] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:27:21] [INFO] [Paralela] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:27:21] [INFO] [Paralela] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:27:21] [INFO] [Paralela] Forçando ativação da Exportação
+[2026-08-16 10:27:22] [INFO] [Paralela] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:27:22] [ERROR] [Paralela] Falha executando Paralela: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[2026-08-16 10:27:22] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 285, in sincronizar_todas_as_unidades_sponte
+    path_rec = extrair_contas_receber_unidade(page_unid, unidade, data_inicial_sp, logger, log_ui)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 240, in extrair_contas_receber_unidade
+    page.evaluate("document.querySelector('#ctl00_ctl00_ContentPlaceHolder1_btnGerar_div').click()")
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\sync_api\_generated.py", line 9385, in evaluate
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.evaluate(expression=expression, arg=mapping.to_impl(arg))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_page.py", line 472, in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_frame.py", line 345, in evaluate
+    await self._channel.send(
+    ...<6 lines>...
+    )
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 76, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 632, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+
+[2026-08-16 10:27:22] [INFO] [Paralela] Ciclo encerrado. Tempo: 19.06s.
+[2026-08-16 10:27:22] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:27:22] [INFO] [2/6] [FILIAL MATATU DE BROTAS]
+[2026-08-16 10:27:30] [INFO] [Matatu de Brotas] Acessando módulo Financeiro...
+[2026-08-16 10:27:38] [INFO] [Matatu de Brotas] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:27:39] [INFO] [Matatu de Brotas] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:27:39] [INFO] [Matatu de Brotas] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:27:39] [INFO] [Matatu de Brotas] Forçando ativação da Exportação
+[2026-08-16 10:27:40] [INFO] [Matatu de Brotas] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:27:40] [ERROR] [Matatu de Brotas] Falha executando Matatu de Brotas: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[2026-08-16 10:27:40] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 285, in sincronizar_todas_as_unidades_sponte
+    path_rec = extrair_contas_receber_unidade(page_unid, unidade, data_inicial_sp, logger, log_ui)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 240, in extrair_contas_receber_unidade
+    page.evaluate("document.querySelector('#ctl00_ctl00_ContentPlaceHolder1_btnGerar_div').click()")
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\sync_api\_generated.py", line 9385, in evaluate
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.evaluate(expression=expression, arg=mapping.to_impl(arg))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_page.py", line 472, in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_frame.py", line 345, in evaluate
+    await self._channel.send(
+    ...<6 lines>...
+    )
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 76, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 632, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+
+[2026-08-16 10:27:40] [INFO] [Matatu de Brotas] Ciclo encerrado. Tempo: 18.48s.
+[2026-08-16 10:27:40] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:27:40] [INFO] [3/6] [FILIAL IGUATEMI]
+[2026-08-16 10:27:49] [INFO] [Iguatemi] Acessando módulo Financeiro...
+[2026-08-16 10:27:57] [INFO] [Iguatemi] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:27:57] [INFO] [Iguatemi] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:27:57] [INFO] [Iguatemi] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:27:58] [INFO] [Iguatemi] Forçando ativação da Exportação
+[2026-08-16 10:27:59] [INFO] [Iguatemi] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:27:59] [ERROR] [Iguatemi] Falha executando Iguatemi: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[2026-08-16 10:27:59] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 285, in sincronizar_todas_as_unidades_sponte
+    path_rec = extrair_contas_receber_unidade(page_unid, unidade, data_inicial_sp, logger, log_ui)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 240, in extrair_contas_receber_unidade
+    page.evaluate("document.querySelector('#ctl00_ctl00_ContentPlaceHolder1_btnGerar_div').click()")
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\sync_api\_generated.py", line 9385, in evaluate
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.evaluate(expression=expression, arg=mapping.to_impl(arg))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_page.py", line 472, in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_frame.py", line 345, in evaluate
+    await self._channel.send(
+    ...<6 lines>...
+    )
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 76, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 632, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+
+[2026-08-16 10:27:59] [INFO] [Iguatemi] Ciclo encerrado. Tempo: 18.47s.
+[2026-08-16 10:27:59] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:27:59] [INFO] [4/6] [FILIAL SIMÕES FILHO]
+[2026-08-16 10:28:07] [INFO] [Simões Filho] Acessando módulo Financeiro...
+[2026-08-16 10:28:15] [INFO] [Simões Filho] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:28:16] [INFO] [Simões Filho] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:28:16] [INFO] [Simões Filho] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:28:16] [INFO] [Simões Filho] Forçando ativação da Exportação
+[2026-08-16 10:28:17] [INFO] [Simões Filho] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:28:17] [ERROR] [Simões Filho] Falha executando Simões Filho: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[2026-08-16 10:28:17] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 285, in sincronizar_todas_as_unidades_sponte
+    path_rec = extrair_contas_receber_unidade(page_unid, unidade, data_inicial_sp, logger, log_ui)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 240, in extrair_contas_receber_unidade
+    page.evaluate("document.querySelector('#ctl00_ctl00_ContentPlaceHolder1_btnGerar_div').click()")
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\sync_api\_generated.py", line 9385, in evaluate
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.evaluate(expression=expression, arg=mapping.to_impl(arg))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_page.py", line 472, in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_frame.py", line 345, in evaluate
+    await self._channel.send(
+    ...<6 lines>...
+    )
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 76, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 632, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+
+[2026-08-16 10:28:17] [INFO] [Simões Filho] Ciclo encerrado. Tempo: 18.56s.
+[2026-08-16 10:28:17] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:28:17] [INFO] [5/6] [FILIAL PERIPERI]
+[2026-08-16 10:28:26] [INFO] [Periperi] Acessando módulo Financeiro...
+[2026-08-16 10:28:34] [INFO] [Periperi] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:28:35] [INFO] [Periperi] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:28:35] [INFO] [Periperi] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:28:35] [INFO] [Periperi] Forçando ativação da Exportação
+[2026-08-16 10:28:36] [INFO] [Periperi] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:28:36] [ERROR] [Periperi] Falha executando Periperi: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[2026-08-16 10:28:36] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 285, in sincronizar_todas_as_unidades_sponte
+    path_rec = extrair_contas_receber_unidade(page_unid, unidade, data_inicial_sp, logger, log_ui)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 240, in extrair_contas_receber_unidade
+    page.evaluate("document.querySelector('#ctl00_ctl00_ContentPlaceHolder1_btnGerar_div').click()")
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\sync_api\_generated.py", line 9385, in evaluate
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.evaluate(expression=expression, arg=mapping.to_impl(arg))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_page.py", line 472, in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_frame.py", line 345, in evaluate
+    await self._channel.send(
+    ...<6 lines>...
+    )
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 76, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 632, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+
+[2026-08-16 10:28:36] [INFO] [Periperi] Ciclo encerrado. Tempo: 18.88s.
+[2026-08-16 10:28:36] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:28:36] [INFO] [6/6] [FILIAL CAJAZEIRAS]
+[2026-08-16 10:28:45] [INFO] [Cajazeiras] Acessando módulo Financeiro...
+[2026-08-16 10:28:53] [INFO] [Cajazeiras] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-16 10:28:54] [INFO] [Cajazeiras] Injetando corte de tempo: 01/11/2025
+[2026-08-16 10:28:54] [INFO] [Cajazeiras] Isolando categoria: 1. Mensalidades
+[2026-08-16 10:28:54] [INFO] [Cajazeiras] Forçando ativação da Exportação
+[2026-08-16 10:28:55] [INFO] [Cajazeiras] Disparando Botão de Visualização/Exportação
+[2026-08-16 10:28:55] [ERROR] [Cajazeiras] Falha executando Cajazeiras: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[2026-08-16 10:28:55] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 285, in sincronizar_todas_as_unidades_sponte
+    path_rec = extrair_contas_receber_unidade(page_unid, unidade, data_inicial_sp, logger, log_ui)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 240, in extrair_contas_receber_unidade
+    page.evaluate("document.querySelector('#ctl00_ctl00_ContentPlaceHolder1_btnGerar_div').click()")
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\sync_api\_generated.py", line 9385, in evaluate
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.evaluate(expression=expression, arg=mapping.to_impl(arg))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_page.py", line 472, in evaluate
+    return await self._main_frame.evaluate(expression, arg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_frame.py", line 345, in evaluate
+    await self._channel.send(
+    ...<6 lines>...
+    )
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 76, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 632, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.evaluate: TypeError: Cannot read properties of null (reading 'click')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:72)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:311:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+
+[2026-08-16 10:28:55] [INFO] [Cajazeiras] Ciclo encerrado. Tempo: 18.61s.
+[2026-08-16 10:28:55] [INFO] ==========================================================================================
+[2026-08-16 10:28:55] [INFO] RESUMO GERAL | TEMPO: 114.07s
+[2026-08-16 10:28:55] [INFO] Sucessos (0): Nenhum
+[2026-08-16 10:28:55] [ERROR] Falhas (6): ['Paralela', 'Matatu de Brotas', 'Iguatemi', 'Simões Filho', 'Periperi', 'Cajazeiras']
+[2026-08-16 10:28:55] [INFO] ==========================================================================================

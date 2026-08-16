@@ -1,0 +1,113 @@
+[2026-08-16 10:19:48] [INFO] ==========================================================================================
+[2026-08-16 10:19:48] [INFO] INICIANDO SINCRONIZAÇÃO DE RECEITAS | OPERADOR: Daniel | ANO REF: 2026
+[2026-08-16 10:19:48] [INFO] ==========================================================================================
+[2026-08-16 10:19:48] [WARNING] [SISTEMA] Ordem de destruição do banco de dados iniciada ANTES da extração das filiais.
+[2026-08-16 10:19:48] [INFO] [Banco de Dados] Tabela 'recebiveis_auditados' dropada. O banco foi expurgado com sucesso.
+[2026-08-16 10:19:48] [INFO] [SISTEMA] O banco de dados foi completamente expurgado e zerado.
+[2026-08-16 10:19:59] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:19:59] [INFO] [1/6] [FILIAL PARALELA] Inicializando pipeline...
+[2026-08-16 10:20:01] [INFO] [Paralela] Acessando página de Contas a Receber (URL: https://www.sponteweb.com.br/SPRel/Financeiro/ContasReceber.aspx)...
+[2026-08-16 10:20:12] [INFO] [Paralela] Preenchendo regras de tela: Selecionando Pendentes e Quitadas...
+[2026-08-16 10:20:31] [ERROR] [Paralela] Falha arquitetural executando Paralela: Locator.evaluate: Target page, context or browser has been closed
+[2026-08-16 10:20:31] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 284, in sincronizar_todas_as_unidades_sponte
+    path_rec = extrair_contas_receber_unidade(page_unid, unidade, data_inicial_sp, logger, log_ui)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 212, in extrair_contas_receber_unidade
+    marcar_checkbox_por_id(page, "#ctl00_ctl00_ContentPlaceHolder1_tab_tabFiltros_ContentPlaceHolder2_tab_tabFiltro_cbPendentes")
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 94, in marcar_checkbox_por_id
+    chk.evaluate("el => { if(!el.checked) { el.click(); } }")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\sync_api\_generated.py", line 18092, in evaluate
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.evaluate(
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        )
+        ^
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_locator.py", line 195, in evaluate
+    return await self._with_element(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_locator.py", line 114, in _with_element
+    handle = await self.element_handle(timeout=timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_locator.py", line 325, in element_handle
+    handle = await self._frame.wait_for_selector(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._selector, strict=True, state="attached", **params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_frame.py", line 394, in wait_for_selector
+    await self._channel.send(
+        "waitForSelector", self._timeout, locals_to_params(locals())
+    )
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 76, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 632, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TargetClosedError: Locator.evaluate: Target page, context or browser has been closed
+
+[2026-08-16 10:20:32] [INFO] [Paralela] Ciclo de vida da filial encerrado. Tempo total: 32.40s.
+[2026-08-16 10:20:32] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:20:32] [INFO] [2/6] [FILIAL MATATU DE BROTAS] Inicializando pipeline...
+[2026-08-16 10:20:32] [INFO] [Matatu de Brotas] Acessando página de Contas a Receber (URL: https://www.sponteweb.com.br/SPRel/Financeiro/ContasReceber.aspx)...
+[2026-08-16 10:20:33] [ERROR] [Matatu de Brotas] Falha arquitetural executando Matatu de Brotas: Page.goto: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.sponteweb.com.br/SPRel/Financeiro/ContasReceber.aspx", waiting until "domcontentloaded"
+
+[2026-08-16 10:20:33] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 284, in sincronizar_todas_as_unidades_sponte
+    path_rec = extrair_contas_receber_unidade(page_unid, unidade, data_inicial_sp, logger, log_ui)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Rel-CCAA\core\rpa.py", line 205, in extrair_contas_receber_unidade
+    page.goto(URL_CONTAS_RECEBER, wait_until="domcontentloaded", timeout=60000)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\sync_api\_generated.py", line 9875, in goto
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.goto(
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        )
+        ^
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_page.py", line 560, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_frame.py", line 156, in goto
+    await self._channel.send(
+        "goto", self._navigation_timeout, locals_to_params(locals())
+    )
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 76, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\playwright\_impl\_connection.py", line 632, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: Page.goto: net::ERR_ABORTED; maybe frame was detached?
+Call log:
+  - navigating to "https://www.sponteweb.com.br/SPRel/Financeiro/ContasReceber.aspx", waiting until "domcontentloaded"
+
+
+[2026-08-16 10:20:33] [INFO] [Matatu de Brotas] Ciclo de vida da filial encerrado. Tempo total: 1.59s.
+[2026-08-16 10:20:33] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-16 10:20:33] [INFO] [3/6] [FILIAL IGUATEMI] Inicializando pipeline...
