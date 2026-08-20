@@ -1,0 +1,340 @@
+[2026-08-19 19:37:46] [INFO] ==========================================================================================
+[2026-08-19 19:37:46] [INFO] INICIANDO SINCRONIZAÇÃO DE RECEITAS | OPERADOR: Daniel | ANO REF: 2026
+[2026-08-19 19:37:46] [INFO] ==========================================================================================
+[2026-08-19 19:37:46] [INFO] [Banco de Dados] Tabela 'recebiveis_auditados' dropada. O banco foi expurgado com sucesso.
+[2026-08-19 19:37:46] [INFO] [SISTEMA] O banco de dados foi completamente expurgado.
+[2026-08-19 19:37:51] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-19 19:37:51] [INFO] [1/6] [FILIAL PARALELA]
+[2026-08-19 19:37:57] [INFO] Detectada tela de login. Autenticando `Daniel@ccaaparalela`...
+[2026-08-19 19:38:09] [INFO] Autenticado no Sponte para Daniel@ccaaparalela
+[2026-08-19 19:38:09] [INFO] [Paralela] Acessando módulo Financeiro...
+[2026-08-19 19:38:18] [INFO] [Paralela] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-19 19:38:19] [INFO] [Paralela] Injetando corte de tempo: 01/11/2025
+[2026-08-19 19:38:19] [INFO] [Paralela] Isolando categoria: 1. Mensalidades
+[2026-08-19 19:38:20] [INFO] [Paralela] Forçando ativação da Exportação
+[2026-08-19 19:38:21] [INFO] [Paralela] Disparando Botão de Visualização/Exportação
+[2026-08-19 19:38:50] [INFO] [Paralela] Download finalizado: rec_Paralela.xlsx
+[2026-08-19 19:38:50] [INFO] [Paralela] Artefato bruto: 537.56 KB
+[2026-08-19 19:38:50] [INFO] [Paralela] Transferindo para ETL...
+[2026-08-19 19:38:51] [ERROR] [Paralela] Falha executando Paralela: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+[2026-08-19 19:38:51] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1115, in setitem
+    casted = np_can_hold_element(values.dtype, value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\dtypes\cast.py", line 1750, in np_can_hold_element
+    raise LossySetitemError
+pandas.errors.LossySetitemError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\rpa.py", line 296, in sincronizar_todas_as_unidades_sponte
+    df_tratado = process_contas_receber(path_rec, unidade, ano_referencia)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\etl.py", line 112, in process_contas_receber
+    df.loc[is_bolsista, 'situacao'] = 'Quitado (Bolsa)'
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 938, in __setitem__
+    iloc._setitem_with_indexer(indexer, value, self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 1953, in _setitem_with_indexer
+    self._setitem_with_indexer_split_path(indexer, value, name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2044, in _setitem_with_indexer_split_path
+    self._setitem_single_column(loc, value, pi)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2181, in _setitem_single_column
+    self.obj._mgr.column_setitem(loc, plane_indexer, value)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 1528, in column_setitem
+    new_mgr = col_mgr.setitem((idx,), value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 607, in setitem
+    return self.apply("setitem", indexer=indexer, value=value)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 445, in apply
+    applied = getattr(b, f)(**kwargs)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1118, in setitem
+    nb = self.coerce_to_target_dtype(value, raise_on_upcast=True)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 468, in coerce_to_target_dtype
+    raise TypeError(f"Invalid value '{other}' for dtype '{self.values.dtype}'")
+TypeError: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+
+[2026-08-19 19:38:52] [INFO] [Paralela] Ciclo encerrado. Tempo: 60.29s.
+[2026-08-19 19:38:52] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-19 19:38:52] [INFO] [2/6] [FILIAL MATATU DE BROTAS]
+[2026-08-19 19:38:54] [INFO] Detectada tela de login. Autenticando `Daniel@ccaamatatu`...
+[2026-08-19 19:39:07] [INFO] Autenticado no Sponte para Daniel@ccaamatatu
+[2026-08-19 19:39:07] [INFO] [Matatu de Brotas] Acessando módulo Financeiro...
+[2026-08-19 19:39:15] [INFO] [Matatu de Brotas] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-19 19:39:15] [INFO] [Matatu de Brotas] Injetando corte de tempo: 01/11/2025
+[2026-08-19 19:39:16] [INFO] [Matatu de Brotas] Isolando categoria: 1. Mensalidades
+[2026-08-19 19:39:16] [INFO] [Matatu de Brotas] Forçando ativação da Exportação
+[2026-08-19 19:39:18] [INFO] [Matatu de Brotas] Disparando Botão de Visualização/Exportação
+[2026-08-19 19:39:44] [INFO] [Matatu de Brotas] Download finalizado: rec_Matatu de Brotas.xlsx
+[2026-08-19 19:39:44] [INFO] [Matatu de Brotas] Artefato bruto: 560.67 KB
+[2026-08-19 19:39:44] [INFO] [Matatu de Brotas] Transferindo para ETL...
+[2026-08-19 19:39:45] [ERROR] [Matatu de Brotas] Falha executando Matatu de Brotas: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+[2026-08-19 19:39:45] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1115, in setitem
+    casted = np_can_hold_element(values.dtype, value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\dtypes\cast.py", line 1750, in np_can_hold_element
+    raise LossySetitemError
+pandas.errors.LossySetitemError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\rpa.py", line 296, in sincronizar_todas_as_unidades_sponte
+    df_tratado = process_contas_receber(path_rec, unidade, ano_referencia)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\etl.py", line 112, in process_contas_receber
+    df.loc[is_bolsista, 'situacao'] = 'Quitado (Bolsa)'
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 938, in __setitem__
+    iloc._setitem_with_indexer(indexer, value, self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 1953, in _setitem_with_indexer
+    self._setitem_with_indexer_split_path(indexer, value, name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2044, in _setitem_with_indexer_split_path
+    self._setitem_single_column(loc, value, pi)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2181, in _setitem_single_column
+    self.obj._mgr.column_setitem(loc, plane_indexer, value)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 1528, in column_setitem
+    new_mgr = col_mgr.setitem((idx,), value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 607, in setitem
+    return self.apply("setitem", indexer=indexer, value=value)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 445, in apply
+    applied = getattr(b, f)(**kwargs)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1118, in setitem
+    nb = self.coerce_to_target_dtype(value, raise_on_upcast=True)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 468, in coerce_to_target_dtype
+    raise TypeError(f"Invalid value '{other}' for dtype '{self.values.dtype}'")
+TypeError: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+
+[2026-08-19 19:39:45] [INFO] [Matatu de Brotas] Ciclo encerrado. Tempo: 53.31s.
+[2026-08-19 19:39:45] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-19 19:39:45] [INFO] [3/6] [FILIAL IGUATEMI]
+[2026-08-19 19:39:47] [INFO] Detectada tela de login. Autenticando `Daniel@ccaaiguatemi`...
+[2026-08-19 19:40:01] [INFO] Autenticado no Sponte para Daniel@ccaaiguatemi
+[2026-08-19 19:40:01] [INFO] [Iguatemi] Acessando módulo Financeiro...
+[2026-08-19 19:40:08] [INFO] [Iguatemi] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-19 19:40:09] [INFO] [Iguatemi] Injetando corte de tempo: 01/11/2025
+[2026-08-19 19:40:09] [INFO] [Iguatemi] Isolando categoria: 1. Mensalidades
+[2026-08-19 19:40:10] [INFO] [Iguatemi] Forçando ativação da Exportação
+[2026-08-19 19:40:11] [INFO] [Iguatemi] Disparando Botão de Visualização/Exportação
+[2026-08-19 19:40:36] [INFO] [Iguatemi] Download finalizado: rec_Iguatemi_1787179235.xlsx
+[2026-08-19 19:40:36] [INFO] [Iguatemi] Artefato bruto: 500.56 KB
+[2026-08-19 19:40:36] [INFO] [Iguatemi] Transferindo para ETL...
+[2026-08-19 19:40:37] [ERROR] [Iguatemi] Falha executando Iguatemi: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+[2026-08-19 19:40:37] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1115, in setitem
+    casted = np_can_hold_element(values.dtype, value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\dtypes\cast.py", line 1750, in np_can_hold_element
+    raise LossySetitemError
+pandas.errors.LossySetitemError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\rpa.py", line 296, in sincronizar_todas_as_unidades_sponte
+    df_tratado = process_contas_receber(path_rec, unidade, ano_referencia)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\etl.py", line 112, in process_contas_receber
+    df.loc[is_bolsista, 'situacao'] = 'Quitado (Bolsa)'
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 938, in __setitem__
+    iloc._setitem_with_indexer(indexer, value, self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 1953, in _setitem_with_indexer
+    self._setitem_with_indexer_split_path(indexer, value, name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2044, in _setitem_with_indexer_split_path
+    self._setitem_single_column(loc, value, pi)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2181, in _setitem_single_column
+    self.obj._mgr.column_setitem(loc, plane_indexer, value)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 1528, in column_setitem
+    new_mgr = col_mgr.setitem((idx,), value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 607, in setitem
+    return self.apply("setitem", indexer=indexer, value=value)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 445, in apply
+    applied = getattr(b, f)(**kwargs)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1118, in setitem
+    nb = self.coerce_to_target_dtype(value, raise_on_upcast=True)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 468, in coerce_to_target_dtype
+    raise TypeError(f"Invalid value '{other}' for dtype '{self.values.dtype}'")
+TypeError: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+
+[2026-08-19 19:40:37] [INFO] [Iguatemi] Ciclo encerrado. Tempo: 52.07s.
+[2026-08-19 19:40:37] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-19 19:40:37] [INFO] [4/6] [FILIAL SIMÕES FILHO]
+[2026-08-19 19:40:39] [INFO] Detectada tela de login. Autenticando `Daniel@ccaasimoesfilho`...
+[2026-08-19 19:40:53] [INFO] Autenticado no Sponte para Daniel@ccaasimoesfilho
+[2026-08-19 19:40:53] [INFO] [Simões Filho] Acessando módulo Financeiro...
+[2026-08-19 19:41:02] [INFO] [Simões Filho] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-19 19:41:03] [INFO] [Simões Filho] Injetando corte de tempo: 01/11/2025
+[2026-08-19 19:41:03] [INFO] [Simões Filho] Isolando categoria: 1. Mensalidades
+[2026-08-19 19:41:03] [INFO] [Simões Filho] Forçando ativação da Exportação
+[2026-08-19 19:41:05] [INFO] [Simões Filho] Disparando Botão de Visualização/Exportação
+[2026-08-19 19:41:21] [INFO] [Simões Filho] Download finalizado: rec_Simões Filho.xlsx
+[2026-08-19 19:41:21] [INFO] [Simões Filho] Artefato bruto: 199.94 KB
+[2026-08-19 19:41:21] [INFO] [Simões Filho] Transferindo para ETL...
+[2026-08-19 19:41:21] [ERROR] [Simões Filho] Falha executando Simões Filho: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+[2026-08-19 19:41:21] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1115, in setitem
+    casted = np_can_hold_element(values.dtype, value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\dtypes\cast.py", line 1750, in np_can_hold_element
+    raise LossySetitemError
+pandas.errors.LossySetitemError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\rpa.py", line 296, in sincronizar_todas_as_unidades_sponte
+    df_tratado = process_contas_receber(path_rec, unidade, ano_referencia)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\etl.py", line 112, in process_contas_receber
+    df.loc[is_bolsista, 'situacao'] = 'Quitado (Bolsa)'
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 938, in __setitem__
+    iloc._setitem_with_indexer(indexer, value, self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 1953, in _setitem_with_indexer
+    self._setitem_with_indexer_split_path(indexer, value, name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2044, in _setitem_with_indexer_split_path
+    self._setitem_single_column(loc, value, pi)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2181, in _setitem_single_column
+    self.obj._mgr.column_setitem(loc, plane_indexer, value)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 1528, in column_setitem
+    new_mgr = col_mgr.setitem((idx,), value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 607, in setitem
+    return self.apply("setitem", indexer=indexer, value=value)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 445, in apply
+    applied = getattr(b, f)(**kwargs)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1118, in setitem
+    nb = self.coerce_to_target_dtype(value, raise_on_upcast=True)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 468, in coerce_to_target_dtype
+    raise TypeError(f"Invalid value '{other}' for dtype '{self.values.dtype}'")
+TypeError: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+
+[2026-08-19 19:41:21] [INFO] [Simões Filho] Ciclo encerrado. Tempo: 44.16s.
+[2026-08-19 19:41:21] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-19 19:41:21] [INFO] [5/6] [FILIAL PERIPERI]
+[2026-08-19 19:41:24] [INFO] Detectada tela de login. Autenticando `Daniel@ccaaperiperi`...
+[2026-08-19 19:41:37] [INFO] Autenticado no Sponte para Daniel@ccaaperiperi
+[2026-08-19 19:41:37] [INFO] [Periperi] Acessando módulo Financeiro...
+[2026-08-19 19:41:45] [INFO] [Periperi] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-19 19:41:46] [INFO] [Periperi] Injetando corte de tempo: 01/11/2025
+[2026-08-19 19:41:46] [INFO] [Periperi] Isolando categoria: 1. Mensalidades
+[2026-08-19 19:41:47] [INFO] [Periperi] Forçando ativação da Exportação
+[2026-08-19 19:41:48] [INFO] [Periperi] Disparando Botão de Visualização/Exportação
+[2026-08-19 19:42:47] [INFO] [Periperi] Download finalizado: rec_Periperi.xlsx
+[2026-08-19 19:42:47] [INFO] [Periperi] Artefato bruto: 948.31 KB
+[2026-08-19 19:42:47] [INFO] [Periperi] Transferindo para ETL...
+[2026-08-19 19:42:49] [ERROR] [Periperi] Falha executando Periperi: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+[2026-08-19 19:42:49] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1115, in setitem
+    casted = np_can_hold_element(values.dtype, value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\dtypes\cast.py", line 1750, in np_can_hold_element
+    raise LossySetitemError
+pandas.errors.LossySetitemError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\rpa.py", line 296, in sincronizar_todas_as_unidades_sponte
+    df_tratado = process_contas_receber(path_rec, unidade, ano_referencia)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\etl.py", line 112, in process_contas_receber
+    df.loc[is_bolsista, 'situacao'] = 'Quitado (Bolsa)'
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 938, in __setitem__
+    iloc._setitem_with_indexer(indexer, value, self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 1953, in _setitem_with_indexer
+    self._setitem_with_indexer_split_path(indexer, value, name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2044, in _setitem_with_indexer_split_path
+    self._setitem_single_column(loc, value, pi)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2181, in _setitem_single_column
+    self.obj._mgr.column_setitem(loc, plane_indexer, value)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 1528, in column_setitem
+    new_mgr = col_mgr.setitem((idx,), value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 607, in setitem
+    return self.apply("setitem", indexer=indexer, value=value)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 445, in apply
+    applied = getattr(b, f)(**kwargs)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1118, in setitem
+    nb = self.coerce_to_target_dtype(value, raise_on_upcast=True)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 468, in coerce_to_target_dtype
+    raise TypeError(f"Invalid value '{other}' for dtype '{self.values.dtype}'")
+TypeError: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+
+[2026-08-19 19:42:49] [INFO] [Periperi] Ciclo encerrado. Tempo: 87.67s.
+[2026-08-19 19:42:49] [INFO] ------------------------------------------------------------------------------------------
+[2026-08-19 19:42:49] [INFO] [6/6] [FILIAL CAJAZEIRAS]
+[2026-08-19 19:42:51] [INFO] Detectada tela de login. Autenticando `Daniel@ccaacajazeiras`...
+[2026-08-19 19:43:01] [INFO] Autenticado no Sponte para Daniel@ccaacajazeiras
+[2026-08-19 19:43:01] [INFO] [Cajazeiras] Acessando módulo Financeiro...
+[2026-08-19 19:43:08] [INFO] [Cajazeiras] Marcando: [X] Pendentes e [X] Quitadas via Injeção JS
+[2026-08-19 19:43:08] [INFO] [Cajazeiras] Injetando corte de tempo: 01/11/2025
+[2026-08-19 19:43:09] [INFO] [Cajazeiras] Isolando categoria: 1. Mensalidades
+[2026-08-19 19:43:09] [INFO] [Cajazeiras] Forçando ativação da Exportação
+[2026-08-19 19:43:11] [INFO] [Cajazeiras] Disparando Botão de Visualização/Exportação
+[2026-08-19 19:43:36] [INFO] [Cajazeiras] Download finalizado: rec_Cajazeiras.xlsx
+[2026-08-19 19:43:36] [INFO] [Cajazeiras] Artefato bruto: 517.15 KB
+[2026-08-19 19:43:36] [INFO] [Cajazeiras] Transferindo para ETL...
+[2026-08-19 19:43:37] [ERROR] [Cajazeiras] Falha executando Cajazeiras: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+[2026-08-19 19:43:37] [ERROR] Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1115, in setitem
+    casted = np_can_hold_element(values.dtype, value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\dtypes\cast.py", line 1750, in np_can_hold_element
+    raise LossySetitemError
+pandas.errors.LossySetitemError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\rpa.py", line 296, in sincronizar_todas_as_unidades_sponte
+    df_tratado = process_contas_receber(path_rec, unidade, ano_referencia)
+  File "C:\Users\Vitor Daniel\Desktop\Codigos e Projetos\Semestralizador_ccaa\core\etl.py", line 112, in process_contas_receber
+    df.loc[is_bolsista, 'situacao'] = 'Quitado (Bolsa)'
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 938, in __setitem__
+    iloc._setitem_with_indexer(indexer, value, self.name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 1953, in _setitem_with_indexer
+    self._setitem_with_indexer_split_path(indexer, value, name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2044, in _setitem_with_indexer_split_path
+    self._setitem_single_column(loc, value, pi)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\indexing.py", line 2181, in _setitem_single_column
+    self.obj._mgr.column_setitem(loc, plane_indexer, value)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 1528, in column_setitem
+    new_mgr = col_mgr.setitem((idx,), value)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 607, in setitem
+    return self.apply("setitem", indexer=indexer, value=value)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\managers.py", line 445, in apply
+    applied = getattr(b, f)(**kwargs)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 1118, in setitem
+    nb = self.coerce_to_target_dtype(value, raise_on_upcast=True)
+  File "C:\Users\Vitor Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\internals\blocks.py", line 468, in coerce_to_target_dtype
+    raise TypeError(f"Invalid value '{other}' for dtype '{self.values.dtype}'")
+TypeError: Invalid value 'Quitado (Bolsa)' for dtype 'int64'
+
+[2026-08-19 19:43:37] [INFO] [Cajazeiras] Ciclo encerrado. Tempo: 48.15s.
+[2026-08-19 19:43:37] [INFO] ==========================================================================================
+[2026-08-19 19:43:37] [INFO] RESUMO GERAL | TEMPO: 351.33s
+[2026-08-19 19:43:37] [INFO] Sucessos (0): Nenhum
+[2026-08-19 19:43:37] [ERROR] Falhas (6): ['Paralela', 'Matatu de Brotas', 'Iguatemi', 'Simões Filho', 'Periperi', 'Cajazeiras']
+[2026-08-19 19:43:37] [INFO] ==========================================================================================

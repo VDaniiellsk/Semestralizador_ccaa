@@ -25,7 +25,23 @@ UNIDADES_DOMINIOS = {
     "Cajazeiras": "@ccaacajazeiras"
 }
 
-def configurar_logger_execucao() -> tuple[logging.Logger, Path]:
+# =====================================================================
+# HANDLER DE LOG PARA STREAMLIT
+# =====================================================================
+class StreamlitUIHandler(logging.Handler):
+    """Captura os logs do Python e dispara para a interface do Streamlit em tempo real."""
+    def __init__(self, callback):
+        super().__init__()
+        self.callback = callback
+        self.log_text = ""
+
+    def emit(self, record):
+        msg = self.format(record)
+        self.log_text += msg + "\n"
+        if self.callback:
+            self.callback(self.log_text)
+
+def configurar_logger_execucao(ui_log_callback=None) -> tuple[logging.Logger, Path]:
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_filename = LOGS_DIR / f"rpa_execucao_{timestamp}.log"
     
@@ -37,11 +53,18 @@ def configurar_logger_execucao() -> tuple[logging.Logger, Path]:
         handler.close()
         logger.removeHandler(handler)
         
-    formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+    formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%H:%M:%S")
     
+    # 1. Salva no arquivo físico
     file_handler = logging.FileHandler(log_filename, encoding="utf-8", delay=False)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
+    
+    # 2. Espelha na tela do Streamlit se o callback for fornecido
+    if ui_log_callback:
+        ui_handler = StreamlitUIHandler(ui_log_callback)
+        ui_handler.setFormatter(formatter)
+        logger.addHandler(ui_handler)
     
     return logger, log_filename
 
@@ -147,7 +170,6 @@ def selecionar_categoria_select2(page: Page, texto_categoria: str = "1. Mensalid
 
 def autenticar_se_necessario(page: Page, usuario: str, senha: str, logger, log_ui):
     try:
-        # Aumentamos o espectro de detecção de login para abraçar variações de telas do Sponte
         page.wait_for_selector("input[type='password']", state="visible", timeout=12000)
         tela_login_encontrada = True
     except:
@@ -158,7 +180,6 @@ def autenticar_se_necessario(page: Page, usuario: str, senha: str, logger, log_u
         logger.info(log_msg)
         log_ui(log_msg)
         
-        # Mapeamento estendido de campos de usuário
         campo_usuario = localizar_elemento_profundo(page, "#txtLogin, #Login, input[name='txtLogin'], input[type='email']")
         if not campo_usuario:
             campo_usuario = localizar_elemento_profundo(page, "input[type='text']")
@@ -171,7 +192,6 @@ def autenticar_se_necessario(page: Page, usuario: str, senha: str, logger, log_u
             except:
                 pass
         
-        # Mapeamento estendido de campos de senha
         campo_senha = localizar_elemento_profundo(page, "#txtSenha, input[name='txtSenha'], input[type='password']")
             
         if campo_senha:
@@ -182,7 +202,6 @@ def autenticar_se_necessario(page: Page, usuario: str, senha: str, logger, log_u
             except:
                 pass
             
-        # Mapeamento estendido do botão Entrar
         btn_entrar = localizar_elemento_profundo(page, "#btnok, #btnEntrar, #btnLogin, input[type='submit']")
             
         if btn_entrar:
@@ -229,14 +248,12 @@ def extrair_contas_receber_unidade(page: Page, unidade: str, data_inicial: str, 
     
     logger.info(f"[{unidade}] Disparando Botão de Visualização/Exportação")
     
-    # Tentativa de clique agressivo que busca o botão em todos os iframes
     with page.expect_download(timeout=120000) as download_info:
         btn_gerar = localizar_elemento_profundo(page, "#ctl00_ctl00_ContentPlaceHolder1_btnGerar_div")
         if btn_gerar:
             try:
                 btn_gerar.evaluate("el => el.click()")
             except:
-                # Se falhar o evaluate do elemento, executa js bruto em todos os frames
                 injetar_js_em_todos_os_frames(page, "() => { document.querySelector('#ctl00_ctl00_ContentPlaceHolder1_btnGerar_div').click(); }")
         else:
             injetar_js_em_todos_os_frames(page, "() => { document.querySelector('#ctl00_ctl00_ContentPlaceHolder1_btnGerar_div').click(); }")
@@ -246,8 +263,8 @@ def extrair_contas_receber_unidade(page: Page, unidade: str, data_inicial: str, 
     logger.info(f"[{unidade}] Download finalizado: {path_final.name}")
     return path_final
 
-def sincronizar_todas_as_unidades_sponte(usuario_prefixo: str, senha_padrao: str, ano_referencia: int, status_callback=None, modo_visivel: bool = False) -> tuple[bool, str, Path]:
-    logger, log_path = configurar_logger_execucao()
+def sincronizar_todas_as_unidades_sponte(usuario_prefixo: str, senha_padrao: str, ano_referencia: int, status_callback=None, log_callback=None, modo_visivel: bool = False) -> tuple[bool, str, Path]:
+    logger, log_path = configurar_logger_execucao(ui_log_callback=log_callback)
     inicio_execucao = time.time()
     
     data_inicial_sp = f"01/11/{ano_referencia - 1}"
@@ -283,8 +300,6 @@ def sincronizar_todas_as_unidades_sponte(usuario_prefixo: str, senha_padrao: str
             page_unid = context_unid.new_page()
             
             try:
-                # Sempre ir na raiz de Contas a Receber, ele forçará o redirect pro login se não tiver sessão.
-                # A função 'autenticar_se_necessario' cuida de detectar e preencher.
                 page_unid.goto(URL_CONTAS_RECEBER, wait_until="domcontentloaded", timeout=60000)
                 autenticar_se_necessario(page_unid, login_user, senha_padrao, logger, log_ui)
                 

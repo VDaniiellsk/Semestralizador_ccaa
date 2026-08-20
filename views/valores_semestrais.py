@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
+from datetime import datetime
 from core.database import carregar_dados_auditados
 
 def format_brl(val):
@@ -7,7 +9,7 @@ def format_brl(val):
         return "R$ 0,00"
     return f"R$ {float(val):,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
-st.title("📅 Matriz de Valores e Auditoria Avançada")
+st.title("Matriz de Valores")
 
 df = carregar_dados_auditados()
 
@@ -16,17 +18,26 @@ if df.empty:
     st.stop()
 
 # ---------------------------------------------------------
-# HIGIENIZAÇÃO DE TIPOS E DATAS
+# HIGIENIZAÇÃO E ENGENHARIA DE FEATURES
 # ---------------------------------------------------------
-cols_num = ['valor', 'valor_com_desconto', 'valor_com_juros', 'valor_pago']
+cols_num = ['ValorComDesconto', 'ValorComJuros', 'ValorPago']
 for c in cols_num:
     if c in df.columns:
         df[c] = pd.to_numeric(df[c], errors='coerce').fillna(0.0)
 
-date_cols = ['data_vencimento', 'data_contrato', 'data_pagamento', 'data_matricula', 'data_termino']
+# Remoção do dayfirst=True para respeitar o padrão ISO do banco
+date_cols = ['DataVencimento', 'DataPagamento', 'DataInicio', 'DataTermino']
 for c in date_cols:
     if c in df.columns:
-        df[c] = pd.to_datetime(df[c], dayfirst=True, errors='coerce')
+        df[c] = pd.to_datetime(df[c], errors='coerce')
+
+# Reconstrução do Ano Letivo
+if 'DataInicio' in df.columns:
+    df['MesInicio'] = df['DataInicio'].dt.month.fillna(1)
+    df['AnoInicio'] = df['DataInicio'].dt.year.fillna(datetime.now().year)
+    df['AnoLetivo'] = np.where(df['MesInicio'] >= 11, df['AnoInicio'] + 1, df['AnoInicio'])
+else:
+    df['AnoLetivo'] = datetime.now().year
 
 # ---------------------------------------------------------
 # FILTROS DE PESQUISA
@@ -36,41 +47,32 @@ f1, f2, f3 = st.columns(3)
 f4, f5 = st.columns(2)
 
 with f1:
-    if 'unidade' in df.columns:
-        lista_uni = ['Todas'] + sorted(df['unidade'].dropna().unique().tolist())
-    else:
-        lista_uni = ['Todas']
+    lista_uni = ['Todas'] + sorted(df['unidade'].dropna().unique().tolist()) if 'unidade' in df.columns else ['Todas']
     uni_sel = st.selectbox("Unidade:", lista_uni)
 
 with f2:
-    if 'semestre_ref' in df.columns:
-        lista_sem = ['Todos'] + sorted(df['semestre_ref'].dropna().astype(str).unique().tolist())
-    else:
-        lista_sem = ['Todos']
+    lista_sem = ['Todos'] + sorted(df['SemestreReferencia'].dropna().astype(str).unique().tolist()) if 'SemestreReferencia' in df.columns else ['Todos']
     sem_sel = st.selectbox("Semestre Ref:", lista_sem)
 
 with f3:
-    if 'ano_ref' in df.columns:
-        anos_validos = sorted([int(x) for x in df['ano_ref'].dropna().unique() if int(x) > 2000])
-        ano_padrao = anos_validos[-1] if anos_validos else 2026
-        lista_ano = ['Todos'] + anos_validos
-        ano_sel = st.selectbox("Ano Ref:", lista_ano, index=lista_ano.index(ano_padrao) if ano_padrao in lista_ano else 0)
-    else:
-        ano_sel = 'Todos'
+    anos_validos = sorted([int(x) for x in df['AnoLetivo'].dropna().unique() if int(x) > 2000])
+    ano_padrao = anos_validos[-1] if anos_validos else 2026
+    lista_ano = ['Todos'] + anos_validos
+    ano_sel = st.selectbox("Ano Letivo:", lista_ano, index=lista_ano.index(ano_padrao) if ano_padrao in lista_ano else 0)
 
 with f4:
-    if 'data_vencimento' in df.columns and not df['data_vencimento'].dropna().empty:
-        venc_validos = df['data_vencimento'].dropna()
+    if 'DataVencimento' in df.columns and not df['DataVencimento'].dropna().empty:
+        venc_validos = df['DataVencimento'].dropna()
         min_venc, max_venc = venc_validos.min().date(), venc_validos.max().date()
         venc_range = st.date_input("Range de Vencimento:", [min_venc, max_venc], format="DD/MM/YYYY")
     else:
         venc_range = []
 
 with f5:
-    if 'data_contrato' in df.columns and not df['data_contrato'].dropna().empty:
-        contr_validos = df['data_contrato'].dropna()
+    if 'DataInicio' in df.columns and not df['DataInicio'].dropna().empty:
+        contr_validos = df['DataInicio'].dropna()
         min_contr, max_contr = contr_validos.min().date(), contr_validos.max().date()
-        contr_range = st.date_input("Range de Data de Contrato:", [min_contr, max_contr], format="DD/MM/YYYY")
+        contr_range = st.date_input("Range de Data do Contrato (Início):", [min_contr, max_contr], format="DD/MM/YYYY")
     else:
         contr_range = []
 
@@ -82,19 +84,19 @@ df_f = df.copy()
 if uni_sel != 'Todas' and 'unidade' in df_f.columns:
     df_f = df_f[df_f['unidade'] == uni_sel]
 
-if sem_sel != 'Todos' and 'semestre_ref' in df_f.columns:
-    df_f = df_f[df_f['semestre_ref'] == sem_sel]
+if sem_sel != 'Todos' and 'SemestreReferencia' in df_f.columns:
+    df_f = df_f[df_f['SemestreReferencia'] == sem_sel]
 
-if ano_sel != 'Todos' and 'ano_ref' in df_f.columns:
-    df_f = df_f[pd.to_numeric(df_f['ano_ref'], errors='coerce') == int(ano_sel)]
+if ano_sel != 'Todos':
+    df_f = df_f[df_f['AnoLetivo'] == int(ano_sel)]
 
-if len(venc_range) == 2 and 'data_vencimento' in df_f.columns:
-    df_f = df_f[(df_f['data_vencimento'] >= pd.to_datetime(venc_range[0])) & 
-                (df_f['data_vencimento'] <= pd.to_datetime(venc_range[1]))]
+if len(venc_range) == 2 and 'DataVencimento' in df_f.columns:
+    df_f = df_f[(df_f['DataVencimento'] >= pd.to_datetime(venc_range[0])) & 
+                (df_f['DataVencimento'] <= pd.to_datetime(venc_range[1]))]
 
-if len(contr_range) == 2 and 'data_contrato' in df_f.columns:
-    df_f = df_f[(df_f['data_contrato'] >= pd.to_datetime(contr_range[0])) & 
-                (df_f['data_contrato'] <= pd.to_datetime(contr_range[1]))]
+if len(contr_range) == 2 and 'DataInicio' in df_f.columns:
+    df_f = df_f[(df_f['DataInicio'] >= pd.to_datetime(contr_range[0])) & 
+                (df_f['DataInicio'] <= pd.to_datetime(contr_range[1]))]
 
 st.divider()
 
@@ -105,7 +107,7 @@ if df_f.empty:
 # ---------------------------------------------------------
 # MÉTRICAS DO FILTRO ATIVO
 # ---------------------------------------------------------
-total_filtrado = df_f['valor_com_desconto'].sum() if 'valor_com_desconto' in df_f.columns else 0.0
+total_filtrado = df_f['ValorComDesconto'].sum() if 'ValorComDesconto' in df_f.columns else 0.0
 t1, t2 = st.columns([2, 4])
 t1.metric("Valor Total (Filtrado)", format_brl(total_filtrado))
 t2.metric("Total de Parcelas Selecionadas", f"{len(df_f):,} parcelas".replace(",", "."))
@@ -113,11 +115,11 @@ t2.metric("Total de Parcelas Selecionadas", f"{len(df_f):,} parcelas".replace(",
 # ---------------------------------------------------------
 # MATRIZ FINANCEIRA CONSOLIDADA (PIVOT TABLE)
 # ---------------------------------------------------------
-if 'unidade' in df_f.columns and 'semestre_ref' in df_f.columns and 'situacao' in df_f.columns:
+if 'unidade' in df_f.columns and 'SemestreReferencia' in df_f.columns and 'Situacao' in df_f.columns:
     pivot = df_f.pivot_table(
-        index=['unidade', 'semestre_ref'],
-        columns='situacao',
-        values='valor_com_desconto',
+        index=['unidade', 'SemestreReferencia'],
+        columns='Situacao',
+        values='ValorComDesconto',
         aggfunc='sum',
         fill_value=0.0
     )
@@ -131,18 +133,18 @@ if 'unidade' in df_f.columns and 'semestre_ref' in df_f.columns and 'situacao' i
 # ---------------------------------------------------------
 with st.expander("Ver Detalhamento Analítico (Com Juros e Multas)"):
     cols_ex = [
-        'unidade', 'sacado', 'turma', 'curso', 'data_vencimento', 'data_contrato',
-        'valor', 'valor_com_desconto', 'valor_com_juros', 'valor_pago', 'situacao'
+        'unidade', 'Sacado', 'Turma', 'Curso', 'DataVencimento', 'DataInicio',
+        'ValorComDesconto', 'ValorComJuros', 'ValorPago', 'Situacao'
     ]
     cols_existentes = [c for c in cols_ex if c in df_f.columns]
     df_exibicao = df_f[cols_existentes].copy()
 
-    if 'data_vencimento' in df_exibicao.columns:
-        df_exibicao['data_vencimento'] = df_exibicao['data_vencimento'].dt.strftime('%d/%m/%Y').fillna('-')
-    if 'data_contrato' in df_exibicao.columns:
-        df_exibicao['data_contrato'] = df_exibicao['data_contrato'].dt.strftime('%d/%m/%Y').fillna('-')
+    if 'DataVencimento' in df_exibicao.columns:
+        df_exibicao['DataVencimento'] = df_exibicao['DataVencimento'].dt.strftime('%d/%m/%Y').fillna('-')
+    if 'DataInicio' in df_exibicao.columns:
+        df_exibicao['DataInicio'] = df_exibicao['DataInicio'].dt.strftime('%d/%m/%Y').fillna('-')
 
-    cols_moeda = ['valor', 'valor_com_desconto', 'valor_com_juros', 'valor_pago']
+    cols_moeda = ['ValorComDesconto', 'ValorComJuros', 'ValorPago']
     for c in cols_moeda:
         if c in df_exibicao.columns:
             df_exibicao[c] = df_exibicao[c].map(format_brl)

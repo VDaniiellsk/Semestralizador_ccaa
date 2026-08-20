@@ -1,3 +1,10 @@
+"""
+Módulo de Extração, Transformação e Carga (ETL) para dados financeiros do Sponte.
+
+Este módulo aplica regras de higienização monetária, normalização de datas,
+identificação de bolsistas via valor pago zero e classificação de contratos.
+"""
+
 import pandas as pd
 import numpy as np
 import re
@@ -11,7 +18,8 @@ UNIDADES_VALIDAS = [
     "Cajazeiras"
 ]
 
-def clean_currency(val):
+def clean_currency(val) -> float:
+    """Converte strings de moeda em formato brasileiro para float nativo."""
     if pd.isna(val) or val is None or val == '': return 0.0
     if isinstance(val, (int, float)): return float(val)
     val_str = str(val).replace('R$', '').replace(' ', '').strip()
@@ -21,6 +29,7 @@ def clean_currency(val):
     except: return 0.0
 
 def find_column(dataframe: pd.DataFrame, patterns: list):
+    """Mapeia dinamicamente colunas baseadas em padrões de texto esperados."""
     for pat in patterns:
         for col in dataframe.columns:
             col_str = str(col).lower()
@@ -29,128 +38,118 @@ def find_column(dataframe: pd.DataFrame, patterns: list):
     return None
 
 def process_contas_receber(filepath_or_buffer, unidade: str, ano_referencia: int) -> pd.DataFrame:
-    try:
-        df = pd.read_excel(filepath_or_buffer, header=3)
-        if sum('unnamed' in str(c).lower() for c in df.columns) > len(df.columns) / 2:
-            df = pd.read_excel(filepath_or_buffer)
-    except:
+    df = pd.read_excel(filepath_or_buffer, header=3)
+    if sum('unnamed' in str(c).lower() for c in df.columns) > len(df.columns) / 2:
         df = pd.read_excel(filepath_or_buffer)
 
-    df.columns = df.columns.astype(str).str.strip().str.lower()
-    df = df.loc[:, ~df.columns.duplicated(keep='first')]
-
-    # 1. Identificação Primária
-    mapa_colunas = {
-        'sacado': find_column(df, ['sacado', 'nome do sacado', 'aluno', 'cliente']),
-        'numero_matricula': find_column(df, ['matrícula', 'matricula', 'código', 'codigo', 'ra']),
-        'situacao_aluno': find_column(df, ['situação do aluno', 'situacao do aluno', 'situação aluno', 'situacao aluno']),
-        'data_inicio': find_column(df, ['data início', 'data inicio', 'dt. inicio', 'dt inicio', 'início', 'inicio']),
-        'data_termino': find_column(df, ['data término', 'data termino', 'dt. termino', 'dt termino', 'término', 'termino', 'fim']),
-        'bolsa': find_column(df, ['bolsa', 'convênio', 'convenio', 'desconto', 'desc. bolsa']),
-        'data_vencimento': find_column(df, ['vencimento', 'dt. venc', 'dt venc', 'venc']),
-        'data_pagamento': find_column(df, ['data pagamento', 'dt. pag', 'pagamento', 'pagto', 'liquida']),
-        'valor': find_column(df, ['valor título', 'valor titulo', 'vlr nominal', 'nominal', 'valor']),
-        'valor_com_desconto': find_column(df, ['valor líquido', 'valor liquido', 'com desconto', 'líquido', 'liquido']),
-        'valor_pago': find_column(df, ['valor pago', 'valor recebido', 'recebido', 'pago']),
-        'situacao': find_column(df, ['situação da parcela', 'situacao da parcela', 'situação', 'situacao', 'status']),
-        'turma': find_column(df, ['turma']),
-        'curso': find_column(df, ['curso']),
-        'numero_parcela': find_column(df, ['nº parcela', 'parcela', 'parc'])
-    }
-
-    colunas_vitais_padronizadas = list(mapa_colunas.keys()) + ['unidade']
-
-    rename_dict = {source: target for target, source in mapa_colunas.items() if source and source in df.columns and source != target}
+    # 1. Padronização de Nomes Brutos (Conforme exportação exata do Sponte)
+    colunas_exigidas = [
+        'NumeroParcela', 'Sacado', 'NumeroMatricula', 'ValorComDesconto', 
+        'DataVencimento', 'DataPagamento', 'ValorComJuros', 'ValorPago', 
+        'Bolsa', 'FormaCobranca', 'Situacao', 'SituacaoAluno', 'Turma', 
+        'Curso', 'NomeAtendente', 'DataInicio', 'DataTermino', 'NomeOperadoraCartao'
+    ]
+    
+    # Mapeamento para garantir a captura das colunas corretas ignorando case/espaços
+    cols_map = {str(c).replace(' ', '').lower(): c for c in df.columns}
+    rename_dict = {}
+    for col_exigida in colunas_exigidas:
+        col_lower = col_exigida.lower()
+        if col_lower in cols_map:
+            rename_dict[cols_map[col_lower]] = col_exigida
+            
     df.rename(columns=rename_dict, inplace=True)
-    df = df.loc[:, ~df.columns.duplicated(keep='first')]
-    df['unidade'] = unidade
-
-    # 2. Expurgo do Lixo Desnecessário
-    lixo = [
-        'telefone', 'celular', 'numerorecibo', 'numeroboleto', 'planocontaid', 'nomeatendente', 'complemento', 
-        'cidadealuno', 'cpfresponsavel', 'nomeresponsavel', 'enderecoresponsavel', 'cepresponsavel', 
-        'bairroresponsavel', 'complementoresponsavel', 'celularresponsavel', 'emailresponsavel', 
-        'rgresponsavel', 'foneresponsavel', 'fonecomercialresponsavel', 'estadoresponsavel', 
-        'parentescoresponsavel', 'datanascimentoresponsavel', 'cnabnome', 'banco', 'conta', 'carteira', 
-        'cnabdescricao', 'layoutcobranca', 'numerocheque', 'titularcheque', 'bancocheque', 'agenciacheque', 
-        'contacheque', 'bomparacheque', 'status'
-    ]
     
-    cols_to_drop = [
-        c for c in df.columns 
-        if c not in colunas_vitais_padronizadas 
-        and (str(c).replace(' ', '').lower() in lixo or str(c).lower() in lixo)
-    ]
-    df.drop(columns=cols_to_drop, errors='ignore', inplace=True)
+    # Mantém apenas as colunas exigidas que foram encontradas
+    colunas_presentes = [c for c in colunas_exigidas if c in df.columns]
+    df = df[colunas_presentes].copy()
 
-    # 3. Tratamento Monetário
-    for c in ['valor', 'valor_com_desconto', 'valor_pago']:
-        if c in df.columns:
-            serie = df[c].iloc[:, 0] if isinstance(df[c], pd.DataFrame) else df[c]
-            df[c] = serie.apply(clean_currency)
-        else:
-            df[c] = 0.0
+    # 2. Higienização de Tipos
+    for col in ['ValorComDesconto', 'ValorComJuros', 'ValorPago']:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col].astype(str).str.replace('R$', '').str.replace('.', '').str.replace(',', '.'), errors='coerce').fillna(0.0)
 
-    df['valor_com_desconto'] = np.where(df['valor_com_desconto'] > 0, df['valor_com_desconto'], df['valor'])
-    df['valor_com_juros'] = df['valor_com_desconto']
+    for col in ['DataVencimento', 'DataPagamento', 'DataInicio', 'DataTermino']:
+        if col in df.columns:
+            df[col] = pd.to_datetime(df[col], dayfirst=True, errors='coerce')
+    # 3. Regra de Bolsista 100%
+    if 'Situacao' in df.columns and 'ValorPago' in df.columns and 'Bolsa' in df.columns:
+        df['Situacao'] = df['Situacao'].astype(str).str.strip().str.title()
+        is_bolsista = (df['Situacao'] == 'Quitada') & (df['ValorPago'] == 0.0)
+        df.loc[is_bolsista, 'Bolsa'] = 'Bolsista'
 
-    if 'bolsa' not in df.columns: 
-        df['bolsa'] = 'S/I'
-    else: 
-        serie_b = df['bolsa'].iloc[:, 0] if isinstance(df['bolsa'], pd.DataFrame) else df['bolsa']
-        df['bolsa'] = serie_b.fillna('S/I').astype(str).str.strip().replace(['nan', 'None', '', '0', '0.0', '-'], 'S/I')
+    # 4. Mapeamento de Cursos
+    if 'Turma' in df.columns:
+        df['Turma'] = df['Turma'].astype(str)
+        condicoes_curso = [
+            df['Turma'].str.contains('Español', case=False, na=False),
+            df['Turma'].str.contains('English', case=False, na=False),
+            df['Turma'].str.contains('Kids', case=False, na=False),
+            df['Turma'].str.contains('Preteen', case=False, na=False),
+            df['Turma'].str.contains('TEACHER', case=False, na=False),
+            df['Turma'].str.contains('baby', case=False, na=False)
+        ]
+        escolhas_curso = [
+            'Español', 'English Course', 'Kids Course', 
+            'Preteen Course', "TEACHER'S COURSE", 'Baby Course'
+        ]
+        df['Curso'] = np.select(condicoes_curso, escolhas_curso, default=df.get('Curso', 'S/I'))
 
-    # 4. Tratamento Blindado da Situação (Padroniza maiúsculas/minúsculas)
-    if 'situacao' in df.columns:
-        serie_sit = df['situacao'].iloc[:, 0] if isinstance(df['situacao'], pd.DataFrame) else df['situacao']
-        df['situacao'] = serie_sit.fillna('Pendente').astype(str).str.strip().str.title()
-    else:
-        df['situacao'] = 'Pendente'
-
-    # Expurgo de Inativos Pendentes
-    if 'situacao_aluno' in df.columns:
-        is_inativo_pendente = (df['situacao_aluno'].astype(str).str.lower().str.contains('inativo', na=False)) & (df['situacao'].str.lower() == 'pendente')
-        df = df[~is_inativo_pendente]
-
-    # 5. Tratamento de Datas
-    for c in ['data_inicio', 'data_termino', 'data_vencimento', 'data_pagamento']:
-        if c in df.columns:
-            serie = df[c].iloc[:, 0] if isinstance(df[c], pd.DataFrame) else df[c]
-            df[c] = pd.to_datetime(serie, dayfirst=True, errors='coerce')
-
-    # 6. Ancoragem Estrita pelo Ano
-    if 'data_termino' in df.columns:
-        df = df[df['data_termino'].dt.year == ano_referencia].copy()
-    else:
-        df = df[df['data_vencimento'].dt.year == ano_referencia].copy()
-
-    df['ano_ref'] = ano_referencia
-
-    # 7. Regra de Negócio do Semestre Comercial
-    dt_inicio = pd.Series([pd.NaT] * len(df), index=df.index)
-    if 'data_inicio' in df.columns:
-        dt_inicio = dt_inicio.fillna(df['data_inicio'])
-    if 'data_vencimento' in df.columns:
-        dt_inicio = dt_inicio.fillna(df['data_vencimento'])
+    # 5. Classificação de Contratos e Semestralidade
+    if 'DataInicio' in df.columns and 'Sacado' in df.columns:
+        df['mes_inicio'] = df['DataInicio'].dt.month
+        df['total_parcelas'] = df.groupby('Sacado')['Sacado'].transform('count')
         
-    mes_inicio = dt_inicio.dt.month.fillna(1)
-    
-    if 'data_vencimento' in df.columns:
-        mes_venc = df['data_vencimento'].dt.month.fillna(1)
-        ano_venc = df['data_vencimento'].dt.year.fillna(ano_referencia)
-    else:
-        mes_venc = pd.Series([1] * len(df), index=df.index)
-        ano_venc = pd.Series([ano_referencia] * len(df), index=df.index)
+        def definir_contrato(row):
+            mes = row['mes_inicio']
+            tot = row['total_parcelas']
+            
+            if pd.isna(mes): return 'Semestral'
+            
+            regras = {
+                11: 8, 12: 7, 1: 6, 2: 5, 3: 4, 4: 3
+            }
+            
+            if mes in regras:
+                return 'Anual' if tot >= regras[mes] else 'Semestral'
+            elif 5 <= mes <= 10:
+                return 'Semestral'
+            return 'Semestral'
+            
+        df['TipoContrato'] = df.apply(definir_contrato, axis=1)
+        
+        # Atribuição do Semestre
+        limite_s1 = pd.to_datetime(f"{ano_referencia}-06-30")
+        
+        def definir_semestre(row):
+            venc = row['DataVencimento']
+            mes_ini = row['mes_inicio']
+            
+            if row['TipoContrato'] == 'Anual':
+                if pd.notna(venc) and venc <= limite_s1:
+                    return '1º Semestre'
+                return '2º Semestre'
+            else:
+                if 5 <= mes_ini <= 10:
+                    return '2º Semestre'
+                return '1º Semestre'
+                
+        df['SemestreReferencia'] = df.apply(definir_semestre, axis=1)
+        df.drop(columns=['mes_inicio', 'total_parcelas'], inplace=True)
 
-    is_capta_s2 = (mes_inicio >= 5) & (mes_inicio <= 8)
-    is_venc_s2 = (mes_venc >= 7) & (ano_venc >= ano_referencia)
-
-    df['semestre_num'] = np.where(is_capta_s2 | is_venc_s2, 2, 1)
-    df['semestre_ref'] = df['semestre_num'].astype(str) + "/" + str(ano_referencia)
-
-    # 8. Limpeza Final
-    subset_dedup = [c for c in ['unidade', 'sacado', 'data_vencimento', 'valor', 'numero_parcela'] if c in df.columns]
-    if subset_dedup:
-        df = df.drop_duplicates(subset=subset_dedup, keep='first')
-
+    # =====================================================================
+    # 6. EXPURGO BASEADO NA NOMENCLATURA DA TURMA
+    # =====================================================================
+    if 'Turma' in df.columns:
+        # Extrai estritamente um bloco de 4 dígitos (ex: 2024, 2025, 2026) da string
+        ano_turma = df['Turma'].astype(str).str.extract(r'(20\d{2})')[0]
+        
+        # Converte para numérico. Se a turma não tiver ano na string (ex: "English Kids"), 
+        # assume o ano_referencia provisoriamente para não deletar a linha por engano.
+        ano_turma = pd.to_numeric(ano_turma, errors='coerce').fillna(ano_referencia)
+        
+        # Sobrescreve o DataFrame mantendo APENAS o qu
+        # e bate com o ano do extrator
+        df = df[ano_turma == ano_referencia].copy()
+    df['unidade'] = unidade
     return df
