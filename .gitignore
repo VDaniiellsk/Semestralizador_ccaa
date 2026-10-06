@@ -1,5 +1,6 @@
 # Arquivo específico
 /ContasReceber.aspx
+/test_etl.py
 
 # Dados e arquivos temporários
 /data/
