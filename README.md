@@ -103,7 +103,19 @@ daniel = "senha_admin_aqui"
 diretoria = "senha_diretoria_aqui"
 operacao = "senha_operacao_aqui"
 
+# Exemplo fictício: substitua pelos dados privados de cada unidade.
+[[unidades]]
+nome = "Unidade Exemplo"
+dominio = "@unidade_exemplo"
+
 ```
+
+Repita o bloco `[[unidades]]` para cada unidade, na ordem desejada para a
+sincronização. Use os mesmos nomes já utilizados nos relatórios e no banco local.
+O código carrega os nomes e sufixos de login dessa configuração para o ETL,
+as telas e o robô; essas informações não devem ser escritas no código público.
+Em uma hospedagem Streamlit, configure também esses blocos no painel de secrets.
+O arquivo `.streamlit/secrets.toml` deve continuar ignorado pelo Git.
 
 ---
 

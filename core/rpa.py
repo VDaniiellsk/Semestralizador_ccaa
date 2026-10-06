@@ -16,14 +16,7 @@ LOGS_DIR.mkdir(exist_ok=True)
 
 URL_CONTAS_RECEBER = "https://www.sponteweb.com.br/SPRel/Financeiro/ContasReceber.aspx"
 
-UNIDADES_DOMINIOS = {
-    "Paralela": "@ccaaparalela",
-    "Matatu de Brotas": "@ccaamatatu",
-    "Iguatemi": "@ccaaiguatemi",
-    "Simões Filho": "@ccaasimoesfilho",
-    "Periperi": "@ccaaperiperi",
-    "Cajazeiras": "@ccaacajazeiras"
-}
+from core.config import UNIDADES_DOMINIOS
 
 # =====================================================================
 # HANDLER DE LOG PARA STREAMLIT

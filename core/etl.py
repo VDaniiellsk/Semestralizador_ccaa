@@ -9,14 +9,7 @@ import pandas as pd
 import numpy as np
 import re
 
-UNIDADES_VALIDAS = [
-    "Paralela",
-    "Matatu de Brotas",
-    "Iguatemi",
-    "Simões Filho",
-    "Periperi",
-    "Cajazeiras"
-]
+from core.config import UNIDADES_VALIDAS
 
 def clean_currency(val) -> float:
     """Converte strings de moeda em formato brasileiro para float nativo."""
