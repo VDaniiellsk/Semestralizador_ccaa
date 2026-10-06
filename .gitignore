@@ -1,0 +1,14 @@
+# Arquivo específico
+/ContasReceber.aspx
+
+# Dados e arquivos temporários
+/data/
+/temp_downloads/
+/Logs/
+
+# Configurações locais
+/.streamlit/
+
+# Python
+__pycache__/
+*.py[cod]
