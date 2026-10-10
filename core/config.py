@@ -1,8 +1,11 @@
-"""Configuração privada das unidades, compartilhada pelo ETL e pelo RPA."""
+"""Lê a configuração privada das unidades atendidas pela sincronização.
+
+Os domínios de acesso ficam fora do código publicado e do controle de versão."""
 import streamlit as st
 
 
 def carregar_unidades():
+    """Lê e valida o mapeamento privado entre unidades e domínios de acesso."""
     try:
         registros = st.secrets["unidades"]
     except (KeyError, FileNotFoundError):

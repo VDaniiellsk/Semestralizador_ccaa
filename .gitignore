@@ -1,15 +1,49 @@
-# Arquivo específico
-/ContasReceber.aspx
-/test_etl.py
+# Configurações privadas e credenciais
+/.streamlit/
+secrets.toml
+.env
+.env.*
+!.env.example
 
-# Dados e arquivos temporários
+# Dados financeiros, bases e exportações locais
 /data/
 /temp_downloads/
 /Logs/
+/logs/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.sqlite3-*
+*.xlsx
+*.xls
+*.csv
+*.log
+/ContasReceber.aspx
 
-# Configurações locais
-/.streamlit/
-
-# Python
+# Ambientes Python e caches
+.venv/
+venv/
+env/
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Arquivos de trabalho local
+.DS_Store
+Thumbs.db
+~$*
+*.tmp
+*.bak
+*.orig
+.vscode/
+.idea/
+
+# Referência comercial privada de preços
+/config/precos_*.json

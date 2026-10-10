@@ -1,3 +1,8 @@
+"""Ponto de entrada do aplicativo Streamlit.
+
+Organiza autenticação local, navegação e acesso à tela administrativa.
+As senhas são configuradas no secrets.toml privado; os administradores
+são definidos na lista admins_autorizados deste módulo."""
 import os
 import streamlit as st
 
@@ -7,6 +12,7 @@ import streamlit as st
 def check_password():
     """Valida a senha e gerencia o estado da sessão."""
     def password_entered():
+        """Confere as credenciais locais e remove o campo de senha da sessão após o acesso."""
         usuario = st.session_state["username_input"].strip()
         senha_digitada = st.session_state["password_input"]
         
@@ -39,7 +45,7 @@ def check_password():
         # Autenticação bem-sucedida
         return True
 
-# A execução morre aqui se a senha não for validada
+# Interrompe a renderização das páginas enquanto o acesso não foi validado.
 if not check_password():
     st.stop()
 
@@ -74,7 +80,7 @@ st.markdown("""
 
 if os.path.exists(LOGO_PATH):
     try:
-        # Este é o ÚNICO comando que deve existir. Ele coloca a logo no topo.
+        # Mantém o logo na navegação; sua ausência não impede a consulta.
         st.logo(LOGO_PATH, icon_image=LOGO_PATH)
     except Exception:
         pass
@@ -86,10 +92,10 @@ usuario_atual = st.session_state.get("usuario_logado", "").lower()
 # =====================================================================
 # [RBAC] ROLE-BASED ACCESS CONTROL DINÂMICO
 # =====================================================================
-# Recupera o usuário real da sessão em vez de usar hardcode
+# Recupera o usuário autenticado; a lista abaixo define o acesso administrativo.
 usuario_atual = st.session_state.get("usuario_logado", "").lower()
 
-# Define a hierarquia. Ex: Apenas 'daniel' e 'diretoria' são Admins.
+# Compare os nomes com o usuário em minúsculas; entradas com maiúsculas não coincidem.
 admins_autorizados = ["daniel", "Jobson","Leonardo"]
 papel_usuario = "Admin" if usuario_atual in admins_autorizados else "Viewer"
 
@@ -107,6 +113,8 @@ pages = {
         st.Page("views/dashboard.py", title="Dashboard Geral", icon=":material/dashboard:"),
         st.Page("views/valores_semestrais.py", title="Matriz de Valores", icon=":material/calendar_today:"),
         st.Page("views/valores_alunos.py", title="Valores por Alunos", icon=":material/school:"),
+        st.Page("views/devedores.py", title="Devedores Gerais", icon=":material/account_balance_wallet:"),
+        st.Page("views/turmas.py", title="Turmas e Cursos", icon=":material/groups:"),
         st.Page("views/manual.py", title="Manual de Operação", icon=":material/book:")
     ]
 }
@@ -114,7 +122,7 @@ pages = {
 # A injeção das páginas de controle de banco de dados só ocorre para Admins reais
 if papel_usuario == "Admin":
     pages["Administração (Acesso Restrito)"] = [
-        st.Page("views/upload.py", title="Upload & Sincronização", icon=":material/upload:")
+        st.Page("views/upload.py", title="Upload & Sincronização", icon=":material/upload:"),
     ]
 
 pg = st.navigation(pages)
