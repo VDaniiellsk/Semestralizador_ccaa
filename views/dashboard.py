@@ -1,104 +1,49 @@
+"""Apresenta a visão geral de receitas, recebimentos e parcelas vencidas."""
 import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime
 from core.database import carregar_dados_auditados
+from core.analise import preparar_dados, contar_alunos
+from views.componentes import filtros
 import plotly.express as px
 import plotly.graph_objects as go
 
 def format_brl(val):
+    """Formata um valor para apresentação em reais no painel."""
     if pd.isna(val):
         return "R$ 0,00"
     return f"R$ {float(val):,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 ano_referencia = st.session_state.get("ano_referencia", datetime.now().year)
 
-st.title(f"Dashboard {ano_referencia}")
+st.title("Visão Geral")
 
-df = carregar_dados_auditados()
-
+df = preparar_dados(carregar_dados_auditados())
 if df.empty:
-    st.warning("Nenhuma base financeira carregada. Vá até a aba de Sincronização.")
+    st.info("Nenhuma base carregada. Solicite uma sincronização ao administrador.")
     st.stop()
-
-# ---------------------------------------------------------
-# HIGIENIZAÇÃO E CORREÇÃO DE ESTRUTURA
-# ---------------------------------------------------------
-for c in ['ValorComDesconto', 'ValorPago']:
-    if c in df.columns:
-        df[c] = pd.to_numeric(df[c], errors='coerce').fillna(0.0)
-
-for c in ['DataVencimento', 'DataPagamento', 'DataInicio']:
-    if c in df.columns:
-        df[c] = pd.to_datetime(df[c], errors='coerce')
-
-# Adicionada FormaCobranca na sanitização para evitar falhas de agrupamento
-for c in ['unidade', 'SemestreReferencia', 'Situacao', 'Curso', 'FormaCobranca']:
-    if c not in df.columns:
-        df[c] = 'S/I'
-    else:
-        df[c] = df[c].fillna('S/I').astype(str).str.strip()
-
-# ---------------------------------------------------------
-# ENGENHARIA DE FEATURES (RECONSTRUÇÃO DO ANO LETIVO)
-# ---------------------------------------------------------
-if 'DataInicio' in df.columns:
-    df['MesInicio'] = df['DataInicio'].dt.month.fillna(1)
-    df['AnoInicio'] = df['DataInicio'].dt.year.fillna(datetime.now().year)
-    df['AnoLetivo'] = np.where(df['MesInicio'] >= 11, df['AnoInicio'] + 1, df['AnoInicio'])
-else:
-    df['AnoLetivo'] = datetime.now().year
-
-# Blindagem da identificação de pagamento
-df['IsQuitada'] = df['Situacao'].str.lower().str.contains('quitada', na=False)
-
-# ---------------------------------------------------------
-# FILTROS GLOBAIS
-# ---------------------------------------------------------
-st.markdown("### Filtros Globais")
-c1, c2, c3 = st.columns(3)
-
-with c1:
-    lista_uni = ['Todas'] + sorted(df['unidade'].dropna().unique().tolist())
-    uni_sel = st.selectbox("Unidade:", lista_uni)
-
-with c2:
-    lista_sem = ['Todos'] + sorted(df['SemestreReferencia'].dropna().unique().tolist())
-    sem_sel = st.selectbox("Semestre Ref:", lista_sem)
-
-with c3:
-    anos_validos = sorted([int(x) for x in df['AnoLetivo'].dropna().unique() if int(x) > 2000])
-    ano_padrao = anos_validos[-1] if anos_validos else datetime.now().year
-    lista_ano = ['Todos'] + anos_validos
-    ano_sel = st.selectbox("Ano Letivo:", lista_ano, index=lista_ano.index(ano_padrao) if ano_padrao in lista_ano else 0)
-
-df_f = df.copy()
-if uni_sel != 'Todas':
-    df_f = df_f[df_f['unidade'] == uni_sel]
-if sem_sel != 'Todos':
-    df_f = df_f[df_f['SemestreReferencia'] == sem_sel]
-if ano_sel != 'Todos':
-    df_f = df_f[df_f['AnoLetivo'] == int(ano_sel)]
-
+df_f, _ = filtros(df, 'geral')
 st.divider()
 
-# ---------------------------------------------------------
-# KPIs PRINCIPAIS (CAIXA REAL VS PREVISTO)
-# ---------------------------------------------------------
 hoje = pd.Timestamp(datetime.now().date())
 is_quitada = df_f['IsQuitada']
-is_vencida = (~is_quitada) & (df_f['DataVencimento'] <= hoje)
+is_vencida = df_f['IsVencida']
 
-total_geral = df_f['ValorComDesconto'].sum()
+total_geral = df_f['ValorPrevisto'].sum()
 total_recebido = df_f.loc[is_quitada, 'ValorPago'].sum()
-total_inadimplente_real = df_f.loc[is_vencida, 'ValorComDesconto'].sum()
+total_inadimplente_real = df_f.loc[is_vencida, 'ValorPrevisto'].sum()
 taxa_inadimplencia = (total_inadimplente_real / total_geral * 100) if total_geral > 0 else 0
 
 m1, m2, m3, m4 = st.columns(4)
 m1.metric("Volume Faturado Previsto", format_brl(total_geral))
 m2.metric("Caixa Real (Efetivado)", format_brl(total_recebido))
 m3.metric("Passivo Vencido", format_brl(total_inadimplente_real), delta_color="inverse")
-m4.metric("Taxa de Calote", f"{taxa_inadimplencia:.1f}%", delta_color="inverse")
+m4.metric("Taxa de Inadimplência", f"{taxa_inadimplencia:.1f}%", delta_color="inverse")
+
+p1, p2 = st.columns(2)
+p1.metric("A receber", format_brl(df_f['ValorPendente'].sum()))
+p2.metric("Alunos devedores", contar_alunos(df_f.loc[df_f.IsVencida]))
 
 st.divider()
 
@@ -121,7 +66,7 @@ with tab_geral:
         if not df_f.empty and 'DataVencimento' in df_f.columns:
             df_previsto = df_f.copy()
             df_previsto['Mes_Ano'] = df_previsto['DataVencimento'].dt.to_period('M').astype(str)
-            agrup_previsto = df_previsto.groupby('Mes_Ano')['ValorComDesconto'].sum().reset_index(name='Previsto')
+            agrup_previsto = df_previsto.groupby('Mes_Ano')['ValorPrevisto'].sum().reset_index(name='Previsto')
             
             df_realizado = df_f[df_f['IsQuitada']].copy()
             df_realizado['Mes_Ano'] = df_realizado['DataPagamento'].dt.to_period('M').astype(str)
@@ -136,14 +81,14 @@ with tab_geral:
             st.plotly_chart(fig_fluxo, use_container_width=True)
 
     with col_g2:
-        st.markdown("#### Mapa de Risco: Calote por Curso")
+        st.markdown("#### Inadimplência por Curso")
         if not df_f.empty and 'Curso' in df_f.columns:
             df_vencidos = df_f[is_vencida].copy()
             if not df_vencidos.empty:
-                agrup_curso_venc = df_vencidos.groupby('Curso')['ValorComDesconto'].sum().reset_index().sort_values('ValorComDesconto', ascending=False)
-                fig_curso_venc = px.bar(agrup_curso_venc, x='ValorComDesconto', y='Curso', orientation='h',
-                                   labels={'ValorComDesconto': 'Passivo Vencido (R$)', 'Curso': ''},
-                                   color='ValorComDesconto', color_continuous_scale='Reds')
+                agrup_curso_venc = df_vencidos.groupby('Curso')['ValorPrevisto'].sum().reset_index().sort_values('ValorPrevisto', ascending=False)
+                fig_curso_venc = px.bar(agrup_curso_venc, x='ValorPrevisto', y='Curso', orientation='h',
+                                   labels={'ValorPrevisto': 'Passivo Vencido (R$)', 'Curso': ''},
+                                   color='ValorPrevisto', color_continuous_scale='Reds')
                 fig_curso_venc.update_layout(yaxis={'categoryorder': 'total ascending'})
                 st.plotly_chart(fig_curso_venc, use_container_width=True)
             else:
@@ -152,10 +97,10 @@ with tab_geral:
     st.subheader("Matriz Operacional por Unidade")
     if not df_f.empty:
         resumo_uni = df_f.groupby('unidade').agg(
-            Total_Parcelas=('ValorComDesconto', 'count'),
-            Faturado_Previsto=('ValorComDesconto', 'sum'),
+            Total_Parcelas=('ValorPrevisto', 'count'),
+            Faturado_Previsto=('ValorPrevisto', 'sum'),
             Caixa_Real=('ValorPago', lambda x: x[df_f.loc[x.index, 'IsQuitada']].sum()),
-            Inadimplencia=('ValorComDesconto', lambda x: x[is_vencida.reindex(x.index, fill_value=False)].sum())
+            Inadimplencia=('ValorPrevisto', lambda x: x[is_vencida.reindex(x.index, fill_value=False)].sum())
         ).reset_index()
         
         resumo_uni['Faturado_Previsto'] = resumo_uni['Faturado_Previsto'].map(format_brl)
@@ -167,7 +112,7 @@ with tab_curso:
     st.subheader("Desempenho Financeiro por Curso")
     if not df_f.empty and 'Curso' in df_f.columns:
         agrup_curso = df_f.groupby('Curso').agg(
-            Faturado=('ValorComDesconto', 'sum'),
+            Faturado=('ValorPrevisto', 'sum'),
             Realizado=('ValorPago', lambda x: x[df_f.loc[x.index, 'IsQuitada']].sum())
         ).reset_index()
         
@@ -181,7 +126,7 @@ with tab_cobranca:
     st.subheader("Distribuição por Forma de Cobrança")
     if not df_f.empty and 'FormaCobranca' in df_f.columns:
         agrup_cobranca = df_f.groupby('FormaCobranca').agg(
-            Faturado=('ValorComDesconto', 'sum'),
+            Faturado=('ValorPrevisto', 'sum'),
             Realizado=('ValorPago', lambda x: x[df_f.loc[x.index, 'IsQuitada']].sum())
         ).reset_index().sort_values('Faturado', ascending=False)
         
@@ -198,7 +143,7 @@ with tab_cobranca:
 
 with tab_historico:
     st.subheader("Tração Operacional: Curva de Matrículas")
-    st.markdown("Mede a entrada de volume financeiro e contratos baseado na **Data de Início**.")
+    st.markdown("Distribuição dos alunos e valores pela data de início do contrato.")
     if not df_f.empty and 'DataInicio' in df_f.columns:
         df_historico = df_f.copy()
         # Filtra registros com DataInicio válida
@@ -206,14 +151,15 @@ with tab_historico:
         
         if not df_historico.empty:
             df_historico['Mes_Matricula'] = df_historico['DataInicio'].dt.to_period('M').astype(str)
+            df_historico['_Aluno'] = list(zip(df_historico['unidade'], df_historico['NumeroMatricula']))
             agrup_matricula = df_historico.groupby('Mes_Matricula').agg(
-                Contratos=('NumeroMatricula', 'nunique'),
-                Faturado_Gerado=('ValorComDesconto', 'sum')
+                Alunos=('_Aluno', 'nunique'),
+                Faturado_Gerado=('ValorPrevisto', 'sum')
             ).reset_index().sort_values('Mes_Matricula')
             
-            fig_hist = px.bar(agrup_matricula, x='Mes_Matricula', y='Faturado_Gerado', text='Contratos',
-                              labels={'Mes_Matricula': 'Mês de Início', 'Faturado_Gerado': 'Faturamento Gerado (R$)', 'Contratos': 'Novos Contratos'},
-                              color='Faturado_Gerado', color_continuous_scale='Blues', title="Faturamento vs Contratos Fechados")
+            fig_hist = px.bar(agrup_matricula, x='Mes_Matricula', y='Faturado_Gerado', text='Alunos',
+                              labels={'Mes_Matricula': 'Mês de Início', 'Faturado_Gerado': 'Faturamento Gerado (R$)', 'Alunos': 'Alunos'},
+                              color='Faturado_Gerado', color_continuous_scale='Blues', title="Valores previstos e alunos")
             
             fig_hist.update_traces(textposition='outside')
             st.plotly_chart(fig_hist, use_container_width=True)

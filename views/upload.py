@@ -1,11 +1,15 @@
+"""Inicia a coleta administrativa e mostra seu progresso e os logs.
+
+A publicação da nova base é responsabilidade da camada de sincronização."""
 import streamlit as st
 import pandas as pd
 from pathlib import Path
 from datetime import datetime
-from core.database import limpar_banco
-from core.rpa import sincronizar_todas_as_unidades_sponte, UNIDADES_DOMINIOS, LOGS_DIR
+from core.rpa import UNIDADES_DOMINIOS, LOGS_DIR
+from core.sync_runtime import sincronizar_atualizado
 
 st.title("Central de Ingestão e Sincronização Sponte")
+st.info("A sincronização utiliza o relatório atual do ERP. Os dados anteriores são substituídos somente depois de coletar e validar todas as unidades.")
 
 # ---------------------------------------------------------
 # BOTÃO DE 1 CLIQUE COM REGISTRO DE LOG
@@ -35,27 +39,31 @@ with st.container(border=True):
             st.error("Informe o Usuário e a Senha de acesso para executar a extração.")
         else:
             status_area = st.empty()
-            
+
             # Terminal injetado aqui para exibição do log visual em tempo real
             st.markdown("#### Terminal de Execução")
-            terminal_area = st.empty() 
+            terminal_area = st.empty()
 
             with st.spinner(f"Robô operando a extração do ano letivo {ano_rpa}..."):
-                sucesso, msg, path_log = sincronizar_todas_as_unidades_sponte(
-                    usuario_prefixo=sponte_user.strip(),
-                    senha_padrao=sponte_pass,
-                    ano_referencia=ano_rpa,
-                    status_callback=lambda txt: status_area.info(txt),
-                    log_callback=lambda log_text: terminal_area.code(log_text, language="log"), 
-                    modo_visivel=modo_debug
-                )
-                
+                try:
+                    sucesso, msg, path_log = sincronizar_atualizado(
+                        usuario_prefixo=sponte_user.strip(),
+                        senha_padrao=sponte_pass,
+                        ano_referencia=ano_rpa,
+                        status_callback=lambda txt: status_area.info(txt),
+                        log_callback=lambda log_text: terminal_area.code(log_text, language="log"),
+                        modo_visivel=modo_debug
+                    )
+                except RuntimeError as erro:
+                    st.error(str(erro))
+                    st.stop()
+
                 st.session_state['ultimo_log_path'] = str(path_log)
-                
+
                 if sucesso:
                     st.success(msg)
                 else:
-                    st.error(f"Sincronização concluída com inconsistências. Verifique o terminal acima.")
+                    st.error(msg)
 
 # ---------------------------------------------------------
 # PAINEL DE AUDITORIA E LOGS
@@ -92,11 +100,3 @@ else:
     st.info("Nenhum histórico de execução de sincronização registrado ainda.")
 
 # ---------------------------------------------------------
-# PAINEL DE SEGURANÇA E RESET
-# ---------------------------------------------------------
-#with st.sidebar:
-#    st.subheader("⚙️ Manutenção do Banco")
-#    if st.button("🔴 Forçar Destruição do Banco", type="primary"):
-#        if limpar_banco():
-#            st.success("Banco SQLite reiniciado com sucesso!")
-#            st.rerun()
