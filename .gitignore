@@ -44,6 +44,7 @@ Thumbs.db
 *.orig
 .vscode/
 .idea/
+*.bat
 
 # Referência comercial privada de preços
 /config/precos_*.json
